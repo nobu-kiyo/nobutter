@@ -1,0 +1,40 @@
+<div class="contents row">
+    <% if user_signed_in? && current_user.id == @tweet.user_id %>
+        <ul class="more_list">
+          <li>
+            <%= link_to '編集', "/tweets/#{@tweet.id}/edit", method: :get %>
+          </li>
+          <li>
+            <%= link_to '削除', "/tweets/#{@tweet.id}", method: :delete %>
+          </li>
+        </ul>
+    <% end %>
+    <p><%= @tweet.recommend %></p>
+    <%= simple_format(@tweet.reason) %>
+    <span class="name">
+      <a href="/users/<%= @tweet.user.id %>">
+        <span>投稿者</span><%= @tweet.user.nickname %>
+      </a>
+    </span>
+    <div class="container">
+      <% if current_user %>
+        <%= form_tag("/tweets/#{@tweet.id}/comments", method: :post) do %>
+          <textarea name="text" placeholder="コメントする" rows="2" cols="30"></textarea>
+          <input type="submit" value="SEND">
+        <% end %>
+      <% end %>
+      
+      <div class="comments">
+        <h4>＜コメント一覧＞</h4>
+        <% if @comments %>
+         <% @comments.each do |comment| %>
+           <p>
+             <strong><%= link_to comment.user.nickname, "/users/#{comment.user_id}" %>:</strong>
+             <%= comment.text %>
+           </p>
+         <% end %>
+        <% end %>
+      </div>
+    </div>
+</div>
+      
